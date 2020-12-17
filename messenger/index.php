@@ -2,9 +2,12 @@
 ini_set('display_errors',1);
 $verify_token = "{your-any-random-word}"; // Verify token
 $token = "{your-page-access-token}"; // Page token
-function my_log($text){
-  $myfile = file_put_contents('logs.txt', $text.PHP_EOL , FILE_APPEND | LOCK_EX);
+class Logger {
+	public function info($msg) {
+		error_log(date('d/m/y H:i:s').' - '.$msg."\n", 3, 'output.log');
+	}
 }
+$logger = new Logger();
 if (file_exists(__DIR__ . '/config.php')) {
     $config = include __DIR__ . '/config.php';
     $verify_token = $config['verify_token'];
@@ -45,7 +48,9 @@ if (!empty($_REQUEST['hub_mode']) && $_REQUEST['hub_mode'] == 'subscribe' && $_R
     echo $_REQUEST['hub_challenge'];
 } else {
     // Other event
-    $data = json_decode(file_get_contents("php://input"), true, 512, JSON_BIGINT_AS_STRING);
+    $json_string = file_get_contents("php://input");
+    $data = json_decode($json_string, true, 512, JSON_BIGINT_AS_STRING);
+    $logger->info($json_string);
     if (!empty($data['entry'][0]['messaging'])) {
         foreach ($data['entry'][0]['messaging'] as $message) {
             // Skipping delivery messages
@@ -59,6 +64,7 @@ if (!empty($_REQUEST['hub_mode']) && $_REQUEST['hub_mode'] == 'subscribe' && $_R
             $command = "";
             // When bot receive message from user
             if (!empty($message['message'])) {
+                $logger->info(111);
                 $command = trim($message['message']['text']);
             // When bot receive button click from user
             } else if (!empty($message['postback'])) {
@@ -66,14 +72,17 @@ if (!empty($_REQUEST['hub_mode']) && $_REQUEST['hub_mode'] == 'subscribe' && $_R
                 $bot->send(new Message($message['sender']['id'], $text));
                 continue;
             }
+            $logger->info(222);
             // Handle command
             switch ($command) {
                 // When bot receive "text"
                 case 'text':
+                    $logger->info(333);
                     $bot->send(new Message($message['sender']['id'], 'This is a simple text message.'));
                     break;
                 // When bot receive "image"
                 case 'image':
+                    $logger->info(444);
                     $bot->send(new ImageMessage($message['sender']['id'], 'http://bit.ly/2p9WZBi'));
                     break;
                 // When bot receive "local image"
