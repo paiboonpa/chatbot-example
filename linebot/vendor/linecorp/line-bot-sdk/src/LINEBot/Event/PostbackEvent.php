@@ -44,4 +44,16 @@ class PostbackEvent extends BaseEvent
     {
         return $this->event['postback']['data'];
     }
+
+    /**
+     * Returns the params of postback.
+     *
+     * @return array|null
+     */
+    public function getPostbackParams()
+    {
+        return isset($this->event['postback']['params'])
+            ? $this->event['postback']['params']
+            : null;
+    }
 }

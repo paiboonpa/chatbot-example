@@ -63,7 +63,7 @@ class Response
      */
     public function isSucceeded()
     {
-        return $this->httpStatus === 200;
+        return 200 <= $this->httpStatus && $this->httpStatus <= 299;
     }
 
     /**
@@ -94,7 +94,7 @@ class Response
      */
     public function getHeader($name)
     {
-        if (array_key_exists($name, $this->headers)) {
+        if (isset($this->headers[$name])) {
             return $this->headers[$name];
         }
         return null;

@@ -6,8 +6,8 @@ ini_set('display_errors', 1);
 /************* EDIT YOUR LINE CONFIG HERE!! ******************/
 /**************************************************************/
 
-$channelSecret = '{your-channel-secret}';
-$channelToken = '{your-channel-token}';
+$channelSecret = 'bd129704ada285cd55d6c3a4a3b0d238';
+$channelToken = '+M2fM81XabzN2EfUctE/xcphUqV/BHB7hhSV/DH0uLdsuoicr4T5FPuc5s53/hGKYdcXtWAxTEJ7uvPoSph24gMII0CY5Q0QVdQP4t245WLliJWkujncOWkQwXWS6a53fIQCHnbD0dMSrFuK6ojs8gdB04t89/1O/w1cDnyilFU=';
 
 require('vendor/autoload.php');
 

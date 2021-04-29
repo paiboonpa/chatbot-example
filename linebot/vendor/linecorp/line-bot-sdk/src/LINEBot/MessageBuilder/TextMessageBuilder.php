@@ -20,6 +20,9 @@ namespace LINE\LINEBot\MessageBuilder;
 
 use LINE\LINEBot\Constant\MessageType;
 use LINE\LINEBot\MessageBuilder;
+use LINE\LINEBot\QuickReplyBuilder;
+use LINE\LINEBot\SenderBuilder\SenderBuilder;
+use LINE\LINEBot\MessageBuilder\Text\EmojiTextBuilder;
 
 /**
  * A builder class for text message.
@@ -28,10 +31,17 @@ use LINE\LINEBot\MessageBuilder;
  */
 class TextMessageBuilder implements MessageBuilder
 {
-    /** @var string[] */
+    /** @var mixed[] */
     private $texts;
+
     /** @var array */
     private $message = [];
+
+    /** @var QuickReplyBuilder|null */
+    private $quickReply;
+
+    /** @var SenderBuilder|null */
+    private $sender;
 
     /**
      * TextMessageBuilder constructor.
@@ -49,12 +59,23 @@ class TextMessageBuilder implements MessageBuilder
      */
     public function __construct($text, $extraTexts = null)
     {
-        $extra = [];
+        $extras = [];
         if (!is_null($extraTexts)) {
             $args = func_get_args();
-            $extra = array_slice($args, 1);
+            $extras = array_slice($args, 1);
+
+            foreach ($extras as $key => $extra) {
+                if ($extra instanceof QuickReplyBuilder) {
+                    $this->quickReply = $extra;
+                    unset($extras[$key]);
+                } elseif ($extra instanceof SenderBuilder) {
+                    $this->sender = $extra;
+                    unset($extras[$key]);
+                }
+            }
+            $extras = array_values($extras);
         }
-        $this->texts = array_merge([$text], $extra);
+        $this->texts = array_merge([$text], $extras);
     }
 
     /**
@@ -69,10 +90,28 @@ class TextMessageBuilder implements MessageBuilder
         }
 
         foreach ($this->texts as $text) {
+            if ($text instanceof EmojiTextBuilder) {
+                $this->message[] = $text->build();
+                continue;
+            }
             $this->message[] = [
                 'type' => MessageType::TEXT,
                 'text' => $text,
             ];
+        }
+
+        if ($this->quickReply) {
+            $lastKey = count($this->message) - 1;
+
+            // If the user receives multiple message objects.
+            // The quickReply property of the last message object is displayed.
+            $this->message[$lastKey]['quickReply'] = $this->quickReply->buildQuickReply();
+        }
+
+        if ($this->sender) {
+            foreach ($this->message as $messageKey => $message) {
+                $this->message[$messageKey]['sender'] = $this->sender->buildSender();
+            }
         }
 
         return $this->message;
