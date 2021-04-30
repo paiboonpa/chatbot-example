@@ -201,7 +201,7 @@ function uploadRandomImageToRichmenu($channelAccessToken, $richmenuId) {
   -H 'Content-Type: image/png' \
   -H 'Expect:' \
   -T $imagePath \
-  https://api.line.me/v2/bot/richmenu/$richmenuId/content
+  https://api-data.line.me/v2/bot/richmenu/$richmenuId/content
 EOF;
   $result = json_decode(shell_exec(str_replace('\\', '', str_replace(PHP_EOL, '', $sh))), true);
   if(isset($result['message'])) {
