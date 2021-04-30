@@ -13,6 +13,13 @@ $channelToken = '{your-channel-token}';
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+class Logger {
+	public function info($msg) {
+		error_log(date('d/m/y H:i:s').' - '.$msg."\n", 3, 'output.log');
+	}
+}
+$logger = new Logger();
+
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($channelToken);
 $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channelSecret]);
 $signature = $_SERVER['HTTP_' . \LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
@@ -92,6 +99,7 @@ foreach ($events as $event) {
           '"check" - show Richmenu ID linked to user(you)' . PHP_EOL
         ));
       }
+      $logger->info( 'User ID :'.$event->getUserId() );
     }
   }
 }
