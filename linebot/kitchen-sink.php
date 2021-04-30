@@ -174,8 +174,12 @@ foreach ($events as $event) {
     /**************************************************************/
     /************* EDIT YOUR JSON MESSAGE HERE!! ******************/
     /**************************************************************/
-    //$json = '{"type":"location","title":"d","address":"a","latitude":35.65910807942215,"longitude":139.70372892916203}';
-    //$bot->replyMessage($event->getReplyToken(), new MyJsonMessage($json));
+    //$builders = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+    //$json = '{"type":"sticker","packageId":"11537","stickerId":"52002734"}';
+    //$json2 = '{"type":"sticker","packageId":"11537","stickerId":"52002735"}';
+    //$builders->add(new MyJsonMessage($json));
+    //$builders->add(new MyJsonMessage($json2));
+    //$bot->replyMessage($event->getReplyToken(), $builders);
 
     $handler->handle();
 }
