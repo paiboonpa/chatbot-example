@@ -18,8 +18,6 @@
 
 namespace LINE\LINEBot\RichMenuBuilder;
 
-use LINE\LINEBot\TemplateActionBuilder;
-
 /**
  * A RichMenu area builder class
  *

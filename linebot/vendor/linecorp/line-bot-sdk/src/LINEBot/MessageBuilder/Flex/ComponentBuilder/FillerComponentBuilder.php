@@ -28,9 +28,6 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder;
  */
 class FillerComponentBuilder implements ComponentBuilder
 {
-    /** @var int */
-    private $flex;
-
     /**
      * Create empty FillerComponentBuilder.
      *
@@ -41,12 +38,6 @@ class FillerComponentBuilder implements ComponentBuilder
         return new self();
     }
 
-    public function setFlex($flex)
-    {
-        $this->flex = $flex;
-        return $this;
-    }
-
     /**
      * Builds filler component structure.
      *
@@ -54,12 +45,8 @@ class FillerComponentBuilder implements ComponentBuilder
      */
     public function build()
     {
-        $component = [
+        return [
             'type' => ComponentType::FILLER,
         ];
-        if (isset($this->flex)) {
-            $component['flex'] = $this->flex;
-        }
-        return $component;
     }
 }

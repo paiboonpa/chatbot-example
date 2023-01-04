@@ -54,19 +54,6 @@ class BaseEvent
     }
 
     /**
-     * Returns mode.
-     *
-     * active: The channel is active.
-     * standby: The channel is waiting.
-     *
-     * @return string
-     */
-    public function getMode()
-    {
-        return $this->event['mode'];
-    }
-
-    /**
      * Returns timestamp of the event.
      *
      * @return int
@@ -83,7 +70,7 @@ class BaseEvent
      */
     public function getReplyToken()
     {
-        return isset($this->event['replyToken']) ? $this->event['replyToken'] : null;
+        return array_key_exists('replyToken', $this->event) ? $this->event['replyToken'] : null;
     }
 
     /**
@@ -133,7 +120,7 @@ class BaseEvent
      */
     public function getUserId()
     {
-        return isset($this->event['source']['userId'])
+        return array_key_exists('userId', $this->event['source'])
             ? $this->event['source']['userId']
             : null;
     }
@@ -149,7 +136,7 @@ class BaseEvent
         if (!$this->isGroupEvent()) {
             throw new InvalidEventSourceException('This event source is not a group type');
         }
-        return isset($this->event['source']['groupId'])
+        return array_key_exists('groupId', $this->event['source'])
             ? $this->event['source']['groupId']
             : null;
     }
@@ -165,7 +152,7 @@ class BaseEvent
         if (!$this->isRoomEvent()) {
             throw new InvalidEventSourceException('This event source is not a room type');
         }
-        return isset($this->event['source']['roomId'])
+        return array_key_exists('roomId', $this->event['source'])
             ? $this->event['source']['roomId']
             : null;
     }
@@ -193,15 +180,5 @@ class BaseEvent
 
         # Unknown event
         return null;
-    }
-
-    /**
-     * Returns event
-     *
-     * @return array
-     */
-    public function getEvent()
-    {
-        return $this->event;
     }
 }

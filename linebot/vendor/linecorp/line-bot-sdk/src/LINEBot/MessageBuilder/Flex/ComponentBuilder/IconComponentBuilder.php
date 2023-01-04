@@ -41,17 +41,6 @@ class IconComponentBuilder implements ComponentBuilder
     /** @var ComponentIconAspectRatio */
     private $aspectRatio;
 
-    /** @var string */
-    private $position;
-    /** @var string */
-    private $offsetTop;
-    /** @var string */
-    private $offsetBottom;
-    /** @var string */
-    private $offsetStart;
-    /** @var string */
-    private $offsetEnd;
-
     /** @var array */
     private $component;
 
@@ -60,7 +49,7 @@ class IconComponentBuilder implements ComponentBuilder
      *
      * @param string $url
      * @param ComponentMargin|null $margin
-     * @param ComponentIconSize|string|null $size
+     * @param ComponentIconSize|null $size
      * @param ComponentIconAspectRatio|null $aspectRatio
      */
     public function __construct($url, $margin = null, $size = null, $aspectRatio = null)
@@ -96,7 +85,7 @@ class IconComponentBuilder implements ComponentBuilder
     /**
      * Set margin.
      *
-     * @param ComponentMargin|string|null $margin
+     * @param ComponentMargin|null $margin
      * @return IconComponentBuilder
      */
     public function setMargin($margin)
@@ -108,12 +97,7 @@ class IconComponentBuilder implements ComponentBuilder
     /**
      * Set size.
      *
-     * specifiable pixel and keyword.
-     * (e.g.
-     * pixel: 5px
-     * keyword: xxs (defined in ComponentIconSize)
-     *
-     * @param ComponentIconSize|string|null $size
+     * @param ComponentIconSize|null $size
      * @return IconComponentBuilder
      */
     public function setSize($size)
@@ -125,98 +109,12 @@ class IconComponentBuilder implements ComponentBuilder
     /**
      * Set aspectRatio.
      *
-     * @param ComponentIconAspectRatio|string|null $aspectRatio
+     * @param ComponentIconAspectRatio|null $aspectRatio
      * @return IconComponentBuilder
      */
     public function setAspectRatio($aspectRatio)
     {
         $this->aspectRatio = $aspectRatio;
-        return $this;
-    }
-
-    /**
-     * Set position.
-     *
-     * specifiable relative or absolute
-     *
-     * @param string|ComponentPosition|null $position
-     * @return $this
-     */
-    public function setPosition($position)
-    {
-        $this->position = $position;
-        return $this;
-    }
-
-    /**
-     * Set offsetTop.
-     *
-     * specifiable percentage, pixel and keyword.
-     * (e.g.
-     * percentage: 5%
-     * pixel: 5px
-     * keyword: none (defined in ComponentSpacing)
-     *
-     * @param string|ComponentSpacing|null $offsetTop
-     * @return $this
-     */
-    public function setOffsetTop($offsetTop)
-    {
-        $this->offsetTop = $offsetTop;
-        return $this;
-    }
-    
-    /**
-     * Set offsetBottom.
-     *
-     * specifiable percentage, pixel and keyword.
-     * (e.g.
-     * percentage: 5%
-     * pixel: 5px
-     * keyword: none (defined in ComponentSpacing)
-     *
-     * @param string|ComponentSpacing|null $offsetBottom
-     * @return $this
-     */
-    public function setOffsetBottom($offsetBottom)
-    {
-        $this->offsetBottom = $offsetBottom;
-        return $this;
-    }
-    
-    /**
-     * Set offsetStart.
-     *
-     * specifiable percentage, pixel and keyword.
-     * (e.g.
-     * percentage: 5%
-     * pixel: 5px
-     * keyword: none (defined in ComponentSpacing)
-     *
-     * @param string|ComponentSpacing|null $offsetStart
-     * @return $this
-     */
-    public function setOffsetStart($offsetStart)
-    {
-        $this->offsetStart = $offsetStart;
-        return $this;
-    }
-    
-    /**
-     * Set offsetEnd.
-     *
-     * specifiable percentage, pixel and keyword.
-     * (e.g.
-     * percentage: 5%
-     * pixel: 5px
-     * keyword: none (defined in ComponentSpacing)
-     *
-     * @param string|ComponentSpacing|null $offsetEnd
-     * @return $this
-     */
-    public function setOffsetEnd($offsetEnd)
-    {
-        $this->offsetEnd = $offsetEnd;
         return $this;
     }
 
@@ -237,11 +135,6 @@ class IconComponentBuilder implements ComponentBuilder
             'margin' => $this->margin,
             'size' => $this->size,
             'aspectRatio' => $this->aspectRatio,
-            'position' => $this->position,
-            'offsetTop' => $this->offsetTop,
-            'offsetBottom' => $this->offsetBottom,
-            'offsetStart' => $this->offsetStart,
-            'offsetEnd' => $this->offsetEnd,
         ]);
 
         return $this->component;

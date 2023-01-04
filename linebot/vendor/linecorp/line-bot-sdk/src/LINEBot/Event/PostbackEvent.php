@@ -52,7 +52,7 @@ class PostbackEvent extends BaseEvent
      */
     public function getPostbackParams()
     {
-        return isset($this->event['postback']['params'])
+        return array_key_exists('params', $this->event['postback'])
             ? $this->event['postback']['params']
             : null;
     }

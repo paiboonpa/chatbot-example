@@ -18,11 +18,6 @@
 
 namespace LINE\LINEBot\Util;
 
-/**
- * A utility class for builder class.
- *
- * @package LINE\LINEBot\Util
- */
 class BuildUtil
 {
     /**

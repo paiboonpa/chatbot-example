@@ -44,7 +44,7 @@ class LocationMessage extends MessageEvent
      */
     public function getTitle()
     {
-        return isset($this->message['title']) ? $this->message['title'] : null;
+        return array_key_exists('title', $this->message) ? $this->message['title'] : null;
     }
 
     /**
@@ -54,7 +54,7 @@ class LocationMessage extends MessageEvent
      */
     public function getAddress()
     {
-        return isset($this->message['address']) ? $this->message['address'] : null;
+        return array_key_exists('address', $this->message) ? $this->message['address'] : null;
     }
 
     /**

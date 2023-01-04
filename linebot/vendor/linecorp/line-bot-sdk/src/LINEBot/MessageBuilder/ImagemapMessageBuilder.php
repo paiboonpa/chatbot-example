@@ -22,9 +22,7 @@ use LINE\LINEBot\Constant\MessageType;
 use LINE\LINEBot\ImagemapActionBuilder;
 use LINE\LINEBot\MessageBuilder;
 use LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder;
-use LINE\LINEBot\MessageBuilder\Imagemap\VideoBuilder;
 use LINE\LINEBot\QuickReplyBuilder;
-use LINE\LINEBot\SenderBuilder\SenderBuilder;
 
 /**
  * A builder class for imagemap message.
@@ -42,9 +40,6 @@ class ImagemapMessageBuilder implements MessageBuilder
     /** @var BaseSizeBuilder */
     private $baseSizeBuilder;
 
-    /** @var VideoBuilder|null */
-    private $videoBuilder;
-
     /** @var ImagemapActionBuilder[] */
     private $imagemapActionBuilders;
 
@@ -54,9 +49,6 @@ class ImagemapMessageBuilder implements MessageBuilder
     /** @var QuickReplyBuilder|null */
     private $quickReply;
 
-    /** @var SenderBuilder|null */
-    private $sender;
-
     /**
      * ImagemapMessageBuilder constructor.
      *
@@ -65,25 +57,19 @@ class ImagemapMessageBuilder implements MessageBuilder
      * @param BaseSizeBuilder $baseSizeBuilder
      * @param ImagemapActionBuilder[] $imagemapActionBuilders
      * @param QuickReplyBuilder|null $quickReply
-     * @param VideoBuilder|null $videoBuilder
-     * @param SenderBuilder|null $sender
      */
     public function __construct(
         $baseUrl,
         $altText,
         $baseSizeBuilder,
         array $imagemapActionBuilders,
-        QuickReplyBuilder $quickReply = null,
-        VideoBuilder $videoBuilder = null,
-        SenderBuilder $sender = null
+        QuickReplyBuilder $quickReply = null
     ) {
         $this->baseUrl = $baseUrl;
         $this->altText = $altText;
         $this->baseSizeBuilder = $baseSizeBuilder;
         $this->imagemapActionBuilders = $imagemapActionBuilders;
         $this->quickReply = $quickReply;
-        $this->videoBuilder = $videoBuilder;
-        $this->sender = $sender;
     }
 
     /**
@@ -93,7 +79,7 @@ class ImagemapMessageBuilder implements MessageBuilder
      */
     public function buildMessage()
     {
-        if (!empty($this->message)) {
+        if (! empty($this->message)) {
             return $this->message;
         }
 
@@ -112,14 +98,6 @@ class ImagemapMessageBuilder implements MessageBuilder
 
         if ($this->quickReply) {
             $imagemapMessage['quickReply'] = $this->quickReply->buildQuickReply();
-        }
-
-        if ($this->videoBuilder) {
-            $imagemapMessage['video'] = $this->videoBuilder->build();
-        }
-
-        if ($this->sender) {
-            $imagemapMessage['sender'] = $this->sender->buildSender();
         }
 
         $this->message[] = $imagemapMessage;

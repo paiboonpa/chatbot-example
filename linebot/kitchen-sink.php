@@ -5,15 +5,15 @@ ini_set('display_errors', 1);
 /**************************************************************/
 /************* EDIT YOUR LINE CONFIG HERE!! ******************/
 /**************************************************************/
-
 $channelSecret = '{your-channel-secret}';
 $channelToken = '{your-channel-token}';
 $your_directory_name = 'paiboon';
 
 
-$base_url = 'https://'.$_SERVER['HTTP_HOST'].'/'.$your_directory_name.'/';
-$_SERVER['DOCUMENT_ROOT'] .= '/'.$your_directory_name;
+$base_url = 'https://'.$_SERVER['HTTP_HOST'].'/'.$your_directory_name;
+$_SERVER['DOCUMENT_ROOT'] = '/app/'.$your_directory_name ;
 echo $_SERVER['DOCUMENT_ROOT'];
+echo $base_url;
 
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -78,7 +78,7 @@ $bot = new LINEBot(new CurlHTTPClient($channelToken), [
 
 $signature = '';
 foreach (getallheaders() as $name => $value) {
-    if ($name == 'X-Line-Signature') {
+    if ($name == 'x-line-signature') {
         $signature = $value;
         break;
     }
@@ -174,12 +174,12 @@ foreach ($events as $event) {
     /**************************************************************/
     /************* EDIT YOUR JSON MESSAGE HERE!! ******************/
     /**************************************************************/
-    //$builders = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-    //$json = '{"type":"sticker","packageId":"11537","stickerId":"52002734"}';
-    //$json2 = '{"type":"sticker","packageId":"11537","stickerId":"52002735"}';
-    //$builders->add(new MyJsonMessage($json));
-    //$builders->add(new MyJsonMessage($json2));
-    //$bot->replyMessage($event->getReplyToken(), $builders);
+    // $builders = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+    // $json = '{"type":"sticker","packageId":"11537","stickerId":"52002734"}';
+    // $json2 = '{"type":"sticker","packageId":"11537","stickerId":"52002735"}';
+    // $builders->add(new MyJsonMessage($json));
+    // $builders->add(new MyJsonMessage($json2));
+    // $bot->replyMessage($event->getReplyToken(), $builders);
 
     $handler->handle();
 }

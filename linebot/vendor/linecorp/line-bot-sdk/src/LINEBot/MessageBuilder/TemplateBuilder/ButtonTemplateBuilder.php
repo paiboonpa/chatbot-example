@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpOptionalBeforeRequiredParametersInspection */
+<?php
 
 /**
  * Copyright 2016 LINE Corporation
@@ -26,7 +26,6 @@ use LINE\LINEBot\TemplateActionBuilder;
  * A builder class for button template message.
  *
  * @package LINE\LINEBot\MessageBuilder\TemplateBuilder
- * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class ButtonTemplateBuilder implements TemplateBuilder
 {
@@ -113,7 +112,7 @@ class ButtonTemplateBuilder implements TemplateBuilder
             'actions' => $actions,
         ];
 
-        if (isset($this->title)) {
+        if ($this->title) {
             $this->template['title'] = $this->title;
         }
 

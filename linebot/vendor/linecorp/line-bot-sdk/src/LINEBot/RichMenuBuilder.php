@@ -18,9 +18,6 @@
 
 namespace LINE\LINEBot;
 
-use LINE\LINEBot\RichMenuBuilder\RichMenuAreaBuilder;
-use LINE\LINEBot\RichMenuBuilder\RichMenuSizeBuilder;
-
 /**
  * A builder class for rich menu.
  *
@@ -35,7 +32,7 @@ class RichMenuBuilder
     /** @var string */
     private $name;
     /** @var string */
-    private $chatBarText;
+    private $chartBarText;
     /** @var RichMenuAreaBuilder[] */
     private $areaBuilders = [];
     
@@ -50,12 +47,12 @@ class RichMenuBuilder
      * @param string $chatBarText Text displayed in the chat bar.
      * @param RichMenuAreaBuilder[] $areaBuilders
      */
-    public function __construct($sizeBuilder, $selected, $name, $chatBarText, $areaBuilders)
+    public function __construct($sizeBuilder, $selected, $name, $chartBarText, $areaBuilders)
     {
         $this->sizeBuilder = $sizeBuilder;
         $this->selected = $selected;
         $this->name = $name;
-        $this->chatBarText = $chatBarText;
+        $this->chartBarText = $chartBarText;
         $this->areaBuilders = $areaBuilders;
     }
  
@@ -75,7 +72,7 @@ class RichMenuBuilder
             'size' => $this->sizeBuilder->build(),
             'selected' => $this->selected,
             'name' => $this->name,
-            'chatBarText' => $this->chatBarText,
+            'chatBarText' => $this->chartBarText,
             'areas' => $areas,
         ];
     }

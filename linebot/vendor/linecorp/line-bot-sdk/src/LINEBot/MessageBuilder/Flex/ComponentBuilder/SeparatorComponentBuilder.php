@@ -63,7 +63,7 @@ class SeparatorComponentBuilder implements ComponentBuilder
     /**
      * Set margin.
      *
-     * @param ComponentMargin|string|null $margin
+     * @param ComponentMargin|null $margin
      * @return SeparatorComponentBuilder
      */
     public function setMargin($margin)

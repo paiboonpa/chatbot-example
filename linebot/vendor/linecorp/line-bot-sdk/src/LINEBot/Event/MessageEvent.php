@@ -16,49 +16,55 @@
  * under the License.
  */
 
-namespace LINE\LINEBot\Event;
+namespace LINE\LINEBot\Event\MessageEvent;
+
+use LINE\LINEBot\Event\MessageEvent;
+use LINE\LINEBot\Event\MessageEvent\ImageMessasge\ImageSet;
 
 /**
- * A base class of message event.
+ * A class that represents the message event of image.
  *
- * Don't instantiate this class individually.
- *
- * @package LINE\LINEBot\Event
+ * @package LINE\LINEBot\Event\MessageEvent
  */
-class MessageEvent extends BaseEvent
+class ImageMessage extends MessageEvent
 {
-    /** @var array */
-    protected $message;
+    /** @var ContentProvider */
+    private $contentProvider;
+    /** @var ImageSet */
+    private $imageSet;
 
     /**
-     * MessageEvent constructor.
+     * ImageMessage constructor.
      *
      * @param array $event
      */
     public function __construct($event)
     {
         parent::__construct($event);
-
-        $this->message = $event['message'];
+        $this->contentProvider = new ContentProvider($this->message['contentProvider']);
+        // Only included when multiple images are sent simultaneously.
+        if (isset($this->message['imageSet'])) {
+            $this->imageSet = new ImageSet($this->message['imageSet']);
+        }
     }
 
     /**
-     * Returns the identifier of the message.
+     * Returns contentProvider of the image message.
      *
-     * @return string
+     * @return ContentProvider
      */
-    public function getMessageId()
+    public function getContentProvider()
     {
-        return $this->message['id'];
+        return $this->contentProvider;
     }
-    
+
     /**
-     * Returns the type of the message.
+     * Returns image set of the image message.
      *
-     * @return string
+     * @return ImageSet|null
      */
-    public function getMessageType()
+    public function getImageSet()
     {
-        return $this->message['type'];
+        return $this->imageSet;
     }
 }
