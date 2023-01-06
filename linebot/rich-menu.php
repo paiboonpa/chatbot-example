@@ -22,7 +22,14 @@ $logger = new Logger();
 
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($channelToken);
 $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channelSecret]);
-$signature = $_SERVER['HTTP_' . \LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
+//$signature = $_SERVER['HTTP_' . \LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
+$signature = '';
+foreach (getallheaders() as $name => $value) {
+    if ($name == 'x-line-signature') {
+        $signature = $value;
+        break;
+    }
+}
 
 $events = $bot->parseEventRequest(file_get_contents('php://input'), $signature);
 foreach ($events as $event) {

@@ -32,7 +32,7 @@ $bot = new LINEBot(new CurlHTTPClient($channelToken), [
 
 $signature = '';
 foreach (getallheaders() as $name => $value) {
-    if ($name == 'X-Line-Signature') {
+    if ($name == 'x-line-signature') {
         $signature = $value;
         break;
     }
