@@ -27,7 +27,7 @@ class CurlHTTPClientTest extends TestCase
     private static $reqMirrorPort;
     private static $reqMirrorPID;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
             return;
@@ -54,14 +54,14 @@ class CurlHTTPClientTest extends TestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (!empty(CurlHTTPClientTest::$reqMirrorPID)) {
             posix_kill(CurlHTTPClientTest::$reqMirrorPID, 9);
         }
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
             $this->markTestSkipped("These tests don't support Windows environment for now.");
@@ -72,6 +72,9 @@ class CurlHTTPClientTest extends TestCase
         }
     }
 
+    /**
+     * @throws \LINE\LINEBot\Exception\CurlExecutionException
+     */
     public function testGet()
     {
         $curl = new CurlHTTPClient("channel-token");
@@ -85,6 +88,9 @@ class CurlHTTPClientTest extends TestCase
         $this->assertEquals('LINE-BotSDK-PHP/' . Meta::VERSION, $body['_SERVER']['HTTP_USER_AGENT']);
     }
 
+    /**
+     * @throws \LINE\LINEBot\Exception\CurlExecutionException
+     */
     public function testGetWithParams()
     {
         $curl = new CurlHTTPClient("channel-token");
@@ -99,6 +105,9 @@ class CurlHTTPClientTest extends TestCase
         $this->assertEquals('LINE-BotSDK-PHP/' . Meta::VERSION, $body['_SERVER']['HTTP_USER_AGENT']);
     }
 
+    /**
+     * @throws \LINE\LINEBot\Exception\CurlExecutionException
+     */
     public function testPost()
     {
         $curl = new CurlHTTPClient("channel-token");
@@ -113,6 +122,9 @@ class CurlHTTPClientTest extends TestCase
         $this->assertEquals('LINE-BotSDK-PHP/' . Meta::VERSION, $body['_SERVER']['HTTP_USER_AGENT']);
     }
 
+    /**
+     * @throws \LINE\LINEBot\Exception\CurlExecutionException
+     */
     public function testDelete()
     {
         $curl = new CurlHTTPClient("channel-token");
@@ -140,6 +152,9 @@ class CurlHTTPClientTest extends TestCase
         $this->assertEquals('LINE-BotSDK-PHP/' . Meta::VERSION, $body['_SERVER']['HTTP_USER_AGENT']);
     }
 
+    /**
+     * @throws \LINE\LINEBot\Exception\CurlExecutionException
+     */
     public function testPostImage()
     {
         $base64EncodedImage = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0';
@@ -165,5 +180,28 @@ class CurlHTTPClientTest extends TestCase
         $this->assertEquals('Bearer channel-token', $body['_SERVER']['HTTP_AUTHORIZATION']);
         $this->assertEquals('LINE-BotSDK-PHP/' . Meta::VERSION, $body['_SERVER']['HTTP_USER_AGENT']);
         fclose($tmpfile);
+    }
+
+    public function testDelayResponseWithoutTimeout()
+    {
+        $curl = new CurlHTTPClient("channel-token");
+        $res = $curl->get('127.0.0.1:' . CurlHTTPClientTest::$reqMirrorPort, ['responseDelay' => '1500']);
+        $body = $res->getJSONDecodedBody();
+        $this->assertNotNull($body);
+        $this->assertEquals('GET', $body['_SERVER']['REQUEST_METHOD']);
+        $this->assertEquals('', $body['Body']);
+    }
+
+
+    /**
+     * @throws \LINE\LINEBot\Exception\CurlExecutionException
+     */
+    public function testDelayResponseWithTimeout()
+    {
+        $this->expectException(\LINE\LINEBot\Exception\CurlExecutionException::class);
+        $this->expectExceptionMessage("Operation timed out after");
+        $curl = new CurlHTTPClient("channel-token");
+        $curl->setTimeout(1);
+        $curl->get('127.0.0.1:' . CurlHTTPClientTest::$reqMirrorPort, ['responseDelay' => '1500']);
     }
 }

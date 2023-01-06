@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpOptionalBeforeRequiredParametersInspection */
+
 /**
  * Copyright 2016 LINE Corporation
  *
@@ -26,25 +28,26 @@ use LINE\LINEBot\TemplateActionBuilder;
  * A builder class for button template message.
  *
  * @package LINE\LINEBot\MessageBuilder\TemplateBuilder
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class ButtonTemplateBuilder implements TemplateBuilder
 {
-    /** @var string */
+    /** @var string|null */
     private $title;
 
-    /** @var string */
+    /** @var string|null */
     private $text;
 
-    /** @var string */
+    /** @var string|null */
     private $thumbnailImageUrl;
 
-    /** @var string */
+    /** @var string|null */
     private $imageAspectRatio;
 
-    /** @var string */
+    /** @var string|null */
     private $imageSize;
 
-    /** @var string */
+    /** @var string|null */
     private $imageBackgroundColor;
 
     /** @var TemplateActionBuilder[] */
@@ -54,7 +57,7 @@ class ButtonTemplateBuilder implements TemplateBuilder
     private $template;
 
     /**
-     * @var TemplateActionBuilder
+     * @var TemplateActionBuilder|null
      */
     private $defaultAction;
 
@@ -62,7 +65,7 @@ class ButtonTemplateBuilder implements TemplateBuilder
      * ButtonTemplateBuilder constructor.
      *
      * @param string|null $title
-     * @param string $text
+     * @param string|null $text
      * @param string|null $thumbnailImageUrl
      * @param TemplateActionBuilder[] $actionBuilders
      * @param string|null $imageAspectRatio
@@ -72,9 +75,9 @@ class ButtonTemplateBuilder implements TemplateBuilder
      */
     public function __construct(
         $title = null,
-        $text, // phpcs:ignore
+        $text = null, // phpcs:ignore
         $thumbnailImageUrl = null,
-        array $actionBuilders,
+        array $actionBuilders = [],
         $imageAspectRatio = null,
         $imageSize = null,
         $imageBackgroundColor = null,
@@ -112,27 +115,27 @@ class ButtonTemplateBuilder implements TemplateBuilder
             'actions' => $actions,
         ];
 
-        if ($this->title) {
+        if (isset($this->title)) {
             $this->template['title'] = $this->title;
         }
 
-        if ($this->thumbnailImageUrl) {
+        if (isset($this->thumbnailImageUrl)) {
             $this->template['thumbnailImageUrl'] = $this->thumbnailImageUrl;
         }
 
-        if ($this->imageAspectRatio) {
+        if (isset($this->imageAspectRatio)) {
             $this->template['imageAspectRatio'] = $this->imageAspectRatio;
         }
 
-        if ($this->imageSize) {
+        if (isset($this->imageSize)) {
             $this->template['imageSize'] = $this->imageSize;
         }
 
-        if ($this->imageBackgroundColor) {
+        if (isset($this->imageBackgroundColor)) {
             $this->template['imageBackgroundColor'] = $this->imageBackgroundColor;
         }
 
-        if ($this->defaultAction) {
+        if (isset($this->defaultAction)) {
             $this->template['defaultAction'] = $this->defaultAction->buildTemplateAction();
         }
 

@@ -24,15 +24,18 @@ use PHPUnit\Framework\TestCase;
 
 class DummyHttpClient implements HTTPClient
 {
-    /** @var \PHPUnit_Framework_TestCase */
+    /** @var \PHPUnit\Framework\TestCase */
     private $testRunner;
     /** @var \Closure */
     private $mock;
+    /** @var int */
+    private $statusCode;
 
-    public function __construct(TestCase $testRunner, \Closure $mock)
+    public function __construct(TestCase $testRunner, \Closure $mock, $statusCode = 200)
     {
         $this->testRunner = $testRunner;
         $this->mock = $mock;
+        $this->statusCode = $statusCode;
     }
 
     /**
@@ -44,7 +47,7 @@ class DummyHttpClient implements HTTPClient
     public function get($url, array $data = [], array $headers = [])
     {
         $ret = call_user_func($this->mock, $this->testRunner, 'GET', $url, is_null($data) ? [] : $data);
-        return new Response(200, json_encode($ret));
+        return new Response($this->statusCode, json_encode($ret));
     }
 
     /**
@@ -56,16 +59,31 @@ class DummyHttpClient implements HTTPClient
     public function post($url, array $data, array $headers = null)
     {
         $ret = call_user_func($this->mock, $this->testRunner, 'POST', $url, $data, $headers);
-        return new Response(200, json_encode($ret));
+        return new Response($this->statusCode, json_encode($ret));
+    }
+
+    /**
+     * Sends PUT request to LINE Messaging API.
+     *
+     * @param string $url Request URL.
+     * @param array $data Request body.
+     * @param array|null $headers Request headers.
+     * @return Response Response of API request.
+     */
+    public function put($url, array $data, array $headers = null)
+    {
+        $ret = call_user_func($this->mock, $this->testRunner, 'PUT', $url, $data, $headers);
+        return new Response($this->statusCode, json_encode($ret));
     }
 
     /**
      * @param string $url
+     * @param array|null $data
      * @return Response
      */
     public function delete($url, $data = null)
     {
         $ret = call_user_func($this->mock, $this->testRunner, 'DELETE', $url, is_null($data) ? [] : $data);
-        return new Response(200, json_encode($ret));
+        return new Response($this->statusCode, json_encode($ret));
     }
 }

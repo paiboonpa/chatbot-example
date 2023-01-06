@@ -18,13 +18,16 @@
 
 namespace LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder;
 
-use LINE\LINEBot\TemplateActionBuilder;
+use LINE\LINEBot\Constant\Flex\ComponentAdjustMode;
 use LINE\LINEBot\Constant\Flex\ComponentButtonHeight;
 use LINE\LINEBot\Constant\Flex\ComponentButtonStyle;
 use LINE\LINEBot\Constant\Flex\ComponentGravity;
 use LINE\LINEBot\Constant\Flex\ComponentMargin;
+use LINE\LINEBot\Constant\Flex\ComponentPosition;
+use LINE\LINEBot\Constant\Flex\ComponentSpacing;
 use LINE\LINEBot\Constant\Flex\ComponentType;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder;
+use LINE\LINEBot\TemplateActionBuilder;
 use LINE\LINEBot\Util\BuildUtil;
 
 /**
@@ -49,13 +52,27 @@ class ButtonComponentBuilder implements ComponentBuilder
     /** @var ComponentGravity */
     private $gravity;
 
-    /** @var array */
+    /** @var string */
+    private $position;
+    /** @var string */
+    private $offsetTop;
+    /** @var string */
+    private $offsetBottom;
+    /** @var string */
+    private $offsetStart;
+    /** @var string */
+    private $offsetEnd;
+
+    /** @var ComponentAdjustMode */
+    private $adjustMode;
+
+    /** @var array|null */
     private $component;
 
     /**
      * ButtonComponentBuilder constructor.
      *
-     * @param TemplateActionBuilder $actionBuilder
+     * @param TemplateActionBuilder|null $actionBuilder
      * @param int|null $flex
      * @param ComponentMargin|null $margin
      * @param ComponentButtonHeight|null $height
@@ -118,7 +135,7 @@ class ButtonComponentBuilder implements ComponentBuilder
     /**
      * Set margin.
      *
-     * @param ComponentMargin|null $margin
+     * @param ComponentMargin|string|null $margin
      * @return ButtonComponentBuilder
      */
     public function setMargin($margin)
@@ -130,7 +147,7 @@ class ButtonComponentBuilder implements ComponentBuilder
     /**
      * Set height.
      *
-     * @param ComponentButtonHeight|null $height
+     * @param ComponentButtonHeight|string|null $height
      * @return ButtonComponentBuilder
      */
     public function setHeight($height)
@@ -142,7 +159,7 @@ class ButtonComponentBuilder implements ComponentBuilder
     /**
      * Set style.
      *
-     * @param ComponentButtonStyle|null $style
+     * @param ComponentButtonStyle|string|null $style
      * @return ButtonComponentBuilder
      */
     public function setStyle($style)
@@ -166,12 +183,110 @@ class ButtonComponentBuilder implements ComponentBuilder
     /**
      * Set gravity.
      *
-     * @param ComponentGravity|null $gravity
+     * @param ComponentGravity|string|null $gravity
      * @return ButtonComponentBuilder
      */
     public function setGravity($gravity)
     {
         $this->gravity = $gravity;
+        return $this;
+    }
+
+    /**
+     * Set position.
+     *
+     * specifiable relative or absolute
+     *
+     * @param string|ComponentPosition|null $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+        return $this;
+    }
+
+    /**
+     * Set offsetTop.
+     *
+     * specifiable percentage, pixel and keyword.
+     * (e.g.
+     * percentage: 5%
+     * pixel: 5px
+     * keyword: none (defined in ComponentSpacing)
+     *
+     * @param string|ComponentSpacing|null $offsetTop
+     * @return $this
+     */
+    public function setOffsetTop($offsetTop)
+    {
+        $this->offsetTop = $offsetTop;
+        return $this;
+    }
+
+    /**
+     * Set offsetBottom.
+     *
+     * specifiable percentage, pixel and keyword.
+     * (e.g.
+     * percentage: 5%
+     * pixel: 5px
+     * keyword: none (defined in ComponentSpacing)
+     *
+     * @param string|ComponentSpacing|null $offsetBottom
+     * @return $this
+     */
+    public function setOffsetBottom($offsetBottom)
+    {
+        $this->offsetBottom = $offsetBottom;
+        return $this;
+    }
+
+    /**
+     * Set offsetStart.
+     *
+     * specifiable percentage, pixel and keyword.
+     * (e.g.
+     * percentage: 5%
+     * pixel: 5px
+     * keyword: none (defined in ComponentSpacing)
+     *
+     * @param string|ComponentSpacing|null $offsetStart
+     * @return $this
+     */
+    public function setOffsetStart($offsetStart)
+    {
+        $this->offsetStart = $offsetStart;
+        return $this;
+    }
+
+    /**
+     * Set offsetEnd.
+     *
+     * specifiable percentage, pixel and keyword.
+     * (e.g.
+     * percentage: 5%
+     * pixel: 5px
+     * keyword: none (defined in ComponentSpacing)
+     *
+     * @param string|ComponentSpacing|null $offsetEnd
+     * @return $this
+     */
+    public function setOffsetEnd($offsetEnd)
+    {
+        $this->offsetEnd = $offsetEnd;
+        return $this;
+    }
+
+    /**
+     * Set adjustMode
+     *
+     * @param ComponentAdjustMode|null $adjustMode
+     * @return $this
+     */
+    public function setAdjustMode($adjustMode)
+    {
+        $this->adjustMode = $adjustMode;
         return $this;
     }
 
@@ -195,6 +310,12 @@ class ButtonComponentBuilder implements ComponentBuilder
             'style' => $this->style,
             'color' => $this->color,
             'gravity' => $this->gravity,
+            'position' => $this->position,
+            'offsetTop' => $this->offsetTop,
+            'offsetBottom' => $this->offsetBottom,
+            'offsetStart' => $this->offsetStart,
+            'offsetEnd' => $this->offsetEnd,
+            'adjustMode' => $this->adjustMode,
         ]);
 
         return $this->component;

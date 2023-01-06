@@ -15,6 +15,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 namespace LINE\Tests\LINEBot\MessageBuilder\Flex\ComponentBuilder;
 
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
@@ -25,10 +26,14 @@ use PHPUnit\Framework\TestCase;
 use LINE\LINEBot\Constant\Flex\ComponentLayout;
 use LINE\LINEBot\Constant\Flex\ComponentSpacing;
 use LINE\LINEBot\Constant\Flex\ComponentMargin;
+use LINE\LINEBot\Constant\Flex\ComponentBorderWidth;
+use LINE\LINEBot\Constant\Flex\ComponentPosition;
+use LINE\LINEBot\Constant\Flex\ComponentBackgroundType;
+use LINE\LINEBot\Constant\Flex\ComponentJustifyContent;
+use LINE\LINEBot\Constant\Flex\ComponentAlignItems;
 
 class BoxComponentBuilderTest extends TestCase
 {
-
     public function test()
     {
         $result = json_decode(<<<JSON
@@ -42,12 +47,36 @@ class BoxComponentBuilderTest extends TestCase
   "flex":3,
   "spacing":"sm",
   "margin":"xs",
-  "action":{"type":"message", "label":"ok", "text":"OK"}
+  "action":{"type":"message", "label":"ok", "text":"OK"},
+  "paddingAll":"none",
+  "paddingTop":"5%",
+  "paddingBottom":"5px",
+  "paddingStart":"lg",
+  "paddingEnd":"xl",
+  "backgroundColor":"#000000",
+  "borderColor":"#000000",
+  "borderWidth":"semi-bold",
+  "cornerRadius":"xxl",
+  "position": "relative",
+  "offsetTop": "4px",
+  "offsetBottom": "4%",
+  "offsetStart": "none",
+  "offsetEnd": "sm",
+  "justifyContent": "flex-start",
+  "alignItems": "center",
+  "background": {
+    "type": "linearGradient",
+    "centerColor": "#000000"
+  },
+  "width":"5px",
+  "height":"5%",
+  "maxWidth":"10px",
+  "maxHeight":"10%"
 }
 JSON
             , true);
 
-        $conponentBuilder = new BoxComponentBuilder(
+        $componentBuilder = new BoxComponentBuilder(
             ComponentLayout::VERTICAL,
             [
                 new TextComponentBuilder('Hello, World!'),
@@ -58,9 +87,31 @@ JSON
             ComponentMargin::XS,
             new MessageTemplateActionBuilder('ok', 'OK')
         );
-        $this->assertEquals($result, $conponentBuilder->build());
+        $componentBuilder->setPaddingAll(ComponentSpacing::NONE)
+            ->setPaddingTop('5%')
+            ->setPaddingBottom('5px')
+            ->setPaddingStart(ComponentSpacing::LG)
+            ->setPaddingEnd(ComponentSpacing::XL)
+            ->setBackgroundColor('#000000')
+            ->setBorderColor('#000000')
+            ->setBorderWidth(ComponentBorderWidth::SEMI_BOLD)
+            ->setCornerRadius(ComponentSpacing::XXL)
+            ->setPosition(ComponentPosition::RELATIVE)
+            ->setOffsetTop('4px')
+            ->setOffsetBottom('4%')
+            ->setOffsetStart(ComponentSpacing::NONE)
+            ->setOffsetEnd(ComponentSpacing::SM)
+            ->setJustifyContent(ComponentJustifyContent::FLEX_START)
+            ->setAlignItems(ComponentAlignItems::CENTER)
+            ->setBackgroundType(ComponentBackgroundType::LINEAR_GRADIENT)
+            ->setBackgroundCenterColor('#000000')
+            ->setWidth('5px')
+            ->setHeight('5%')
+            ->setMaxWidth('10px')
+            ->setMaxHeight('10%');
+        $this->assertEquals($result, $componentBuilder->build());
 
-        $conponentBuilder = BoxComponentBuilder::builder()
+        $componentBuilder = BoxComponentBuilder::builder()
             ->setLayout(ComponentLayout::VERTICAL)
             ->setContents([
                 new TextComponentBuilder('Hello, World!'),
@@ -69,7 +120,29 @@ JSON
             ->setFlex(3)
             ->setSpacing(ComponentSpacing::SM)
             ->setMargin(ComponentMargin::XS)
-            ->setAction(new MessageTemplateActionBuilder('ok', 'OK'));
-        $this->assertEquals($result, $conponentBuilder->build());
+            ->setAction(new MessageTemplateActionBuilder('ok', 'OK'))
+            ->setPaddingAll(ComponentSpacing::NONE)
+            ->setPaddingTop('5%')
+            ->setPaddingBottom('5px')
+            ->setPaddingStart(ComponentSpacing::LG)
+            ->setPaddingEnd(ComponentSpacing::XL)
+            ->setBackgroundColor('#000000')
+            ->setBorderColor('#000000')
+            ->setBorderWidth(ComponentBorderWidth::SEMI_BOLD)
+            ->setCornerRadius(ComponentSpacing::XXL)
+            ->setPosition(ComponentPosition::RELATIVE)
+            ->setOffsetTop('4px')
+            ->setOffsetBottom('4%')
+            ->setOffsetStart(ComponentSpacing::NONE)
+            ->setOffsetEnd(ComponentSpacing::SM)
+            ->setJustifyContent(ComponentJustifyContent::FLEX_START)
+            ->setAlignItems(ComponentAlignItems::CENTER)
+            ->setBackgroundType(ComponentBackgroundType::LINEAR_GRADIENT)
+            ->setBackgroundCenterColor('#000000')
+            ->setWidth('5px')
+            ->setHeight('5%')
+            ->setMaxWidth('10px')
+            ->setMaxHeight('10%');
+        $this->assertEquals($result, $componentBuilder->build());
     }
 }

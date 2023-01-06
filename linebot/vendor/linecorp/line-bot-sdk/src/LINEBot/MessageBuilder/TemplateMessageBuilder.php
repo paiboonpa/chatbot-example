@@ -21,6 +21,7 @@ namespace LINE\LINEBot\MessageBuilder;
 use LINE\LINEBot\Constant\MessageType;
 use LINE\LINEBot\MessageBuilder;
 use LINE\LINEBot\QuickReplyBuilder;
+use LINE\LINEBot\SenderBuilder\SenderBuilder;
 
 /**
  * A builder class for template message.
@@ -43,18 +44,27 @@ class TemplateMessageBuilder implements MessageBuilder
      */
     private $quickReply;
 
+    /** @var SenderBuilder|null */
+    private $sender;
+
     /**
      * TemplateMessageBuilder constructor.
      *
      * @param string $altText
      * @param TemplateBuilder $templateBuilder
      * @param QuickReplyBuilder|null $quickReply
+     * @param SenderBuilder|null $sender
      */
-    public function __construct($altText, TemplateBuilder $templateBuilder, QuickReplyBuilder $quickReply = null)
-    {
+    public function __construct(
+        $altText,
+        TemplateBuilder $templateBuilder,
+        QuickReplyBuilder $quickReply = null,
+        SenderBuilder $sender = null
+    ) {
         $this->altText = $altText;
         $this->templateBuilder = $templateBuilder;
         $this->quickReply = $quickReply;
+        $this->sender = $sender;
     }
 
     /**
@@ -64,7 +74,7 @@ class TemplateMessageBuilder implements MessageBuilder
      */
     public function buildMessage()
     {
-        if (! empty($this->message)) {
+        if (!empty($this->message)) {
             return $this->message;
         }
 
@@ -76,6 +86,10 @@ class TemplateMessageBuilder implements MessageBuilder
 
         if ($this->quickReply) {
             $templateMessage['quickReply'] = $this->quickReply->buildQuickReply();
+        }
+
+        if ($this->sender) {
+            $templateMessage['sender'] = $this->sender->buildSender();
         }
 
         $this->message[] = $templateMessage;

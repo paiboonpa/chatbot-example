@@ -15,6 +15,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 namespace LINE\Tests\LINEBot\MessageBuilder\TemplateBuilder;
 
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
@@ -26,7 +27,6 @@ use PHPUnit\Framework\TestCase;
 
 class CarouselTemplateBuilderTest extends TestCase
 {
-
     private static $tests = [
         [
             'param' => [['postback', 'message', 'uri']],
@@ -93,7 +93,7 @@ JSON
 
         foreach (self::$tests as $t) {
             if (is_array($t['param'][0])) {
-                $columnTemplateBuilders= [];
+                $columnTemplateBuilders = [];
                 if (in_array('postback', $t['param'][0])) {
                     $columnTemplateBuilders[] = $postbackActionBuilder;
                 }

@@ -42,7 +42,6 @@ use LINE\LINEBot\Constant\Flex\ComponentMargin;
 use LINE\LINEBot\Constant\Flex\ComponentSpacing;
 use LINE\LINEBot\Constant\Flex\ComponentButtonStyle;
 use LINE\LINEBot\Constant\Flex\ComponentButtonHeight;
-use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SpacerComponentBuilder;
 use LINE\LINEBot\Constant\Flex\ComponentSpaceSize;
 use LINE\LINEBot\Constant\Flex\ComponentGravity;
 use LINE\LINEBot\QuickReplyBuilder\ButtonBuilder\QuickReplyButtonBuilder;
@@ -54,7 +53,7 @@ class SendFlexTest extends TestCase
     public function testReplyFlex()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('POST', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/message/reply', $url);
 
@@ -196,7 +195,7 @@ JSON;
     public function testPushRestaurant()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('POST', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/message/push', $url);
 
@@ -349,12 +348,9 @@ JSON;
             "label": "WEBSITE",
             "uri": "https://example.com"
           }
-        },
-        {
-          "type": "spacer",
-          "size": "sm"
         }
       ],
+      "paddingBottom": "sm",
       "flex": 0
     }
   }
@@ -473,10 +469,9 @@ JSON;
                                                 'WEBSITE',
                                                 'https://example.com'
                                             )
-                                        ),
-                                    SpacerComponentBuilder::builder()
-                                        ->setSize(ComponentSpaceSize::SM)
+                                        )
                                 ])
+                                ->setPaddingBottom(ComponentSpacing::SM)
                         )
                 )
         );
@@ -633,11 +628,8 @@ JSON;
                                         'uri' => 'https://example.com'
                                     ]
                                 ],
-                                [
-                                    'type' => 'spacer',
-                                    'size' => 'sm'
-                                ]
                             ],
+                            'paddingBottom' => 'sm',
                             'flex' => 0
                         ]
                     ]
@@ -653,7 +645,7 @@ JSON;
     public function testPushShopping()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('POST', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/message/push', $url);
 

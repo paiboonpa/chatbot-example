@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 LINE Corporation
  *
@@ -19,6 +20,11 @@ namespace LINE\LINEBot\QuickReplyBuilder;
 
 use LINE\LINEBot\QuickReplyBuilder;
 
+/**
+ * A builder class for quick reply message.
+ *
+ * @package LINE\LINEBot\QuickReplyBuilder
+ */
 class QuickReplyMessageBuilder implements QuickReplyBuilder
 {
     /** @var QuickReplyButtonBuilder[] */
@@ -45,7 +51,7 @@ class QuickReplyMessageBuilder implements QuickReplyBuilder
      */
     public function buildQuickReply()
     {
-        if (! empty($this->quickReply)) {
+        if (!empty($this->quickReply)) {
             return $this->quickReply;
         }
 
@@ -55,7 +61,7 @@ class QuickReplyMessageBuilder implements QuickReplyBuilder
             $items[] = $buttonBuilder->buildQuickReplyButton();
         }
 
-        $this->quickReply = ['items'=>$items];
+        $this->quickReply = ['items' => $items];
 
         return $this->quickReply;
     }

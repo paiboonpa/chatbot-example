@@ -19,6 +19,7 @@
 namespace LINE\LINEBot\KitchenSink\EventHandler\MessageHandler\Flex;
 
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
+use LINE\LINEBot\TemplateActionBuilder\Uri\AltUriBuilder;
 use LINE\LINEBot\Constant\Flex\ComponentButtonHeight;
 use LINE\LINEBot\Constant\Flex\ComponentButtonStyle;
 use LINE\LINEBot\Constant\Flex\ComponentFontSize;
@@ -31,6 +32,7 @@ use LINE\LINEBot\Constant\Flex\ComponentLayout;
 use LINE\LINEBot\Constant\Flex\ComponentMargin;
 use LINE\LINEBot\Constant\Flex\ComponentSpaceSize;
 use LINE\LINEBot\Constant\Flex\ComponentSpacing;
+use LINE\LINEBot\Constant\Flex\BubleContainerSize;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
@@ -38,8 +40,12 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ImageComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SpacerComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SpanComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FlexSampleRestaurant
 {
     /**
@@ -56,6 +62,7 @@ class FlexSampleRestaurant
                     ->setHero(self::createHeroBlock())
                     ->setBody(self::createBodyBlock())
                     ->setFooter(self::createFooterBlock())
+                    ->setSize(BubleContainerSize::GIGA)
             );
     }
 
@@ -66,7 +73,13 @@ class FlexSampleRestaurant
             ->setSize(ComponentImageSize::FULL)
             ->setAspectRatio(ComponentImageAspectRatio::R20TO13)
             ->setAspectMode(ComponentImageAspectMode::COVER)
-            ->setAction(new UriTemplateActionBuilder(null, 'https://example.com'));
+            ->setAction(
+                new UriTemplateActionBuilder(
+                    null,
+                    'https://example.com',
+                    new AltUriBuilder('https://example.com#desktop')
+                )
+            );
     }
 
     private static function createBodyBlock()
@@ -124,6 +137,16 @@ class FlexSampleRestaurant
                     ->setColor('#666666')
                     ->setSize(ComponentFontSize::SM)
                     ->setFlex(5)
+                    ->setContents([
+                        SpanComponentBuilder::builder()
+                            ->setText('10:00'),
+                        SpanComponentBuilder::builder()
+                            ->setText('-')
+                            ->setColor('#a0a0a0')
+                            ->setSize(ComponentFontSize::XS),
+                        SpanComponentBuilder::builder()
+                            ->setText('23:00'),
+                    ])
             ]);
         $info = BoxComponentBuilder::builder()
             ->setLayout(ComponentLayout::VERTICAL)
@@ -133,6 +156,8 @@ class FlexSampleRestaurant
 
         return BoxComponentBuilder::builder()
             ->setLayout(ComponentLayout::VERTICAL)
+            ->setBackgroundColor('#fafafa')
+            ->setPaddingAll('8%')
             ->setContents([$title, $review, $info]);
     }
 
@@ -141,17 +166,32 @@ class FlexSampleRestaurant
         $callButton = ButtonComponentBuilder::builder()
             ->setStyle(ComponentButtonStyle::LINK)
             ->setHeight(ComponentButtonHeight::SM)
-            ->setAction(new UriTemplateActionBuilder('CALL', 'https://example.com'));
+            ->setAction(
+                new UriTemplateActionBuilder(
+                    'CALL',
+                    'https://example.com',
+                    new AltUriBuilder('https://example.com#desktop')
+                )
+            );
         $websiteButton = ButtonComponentBuilder::builder()
             ->setStyle(ComponentButtonStyle::LINK)
             ->setHeight(ComponentButtonHeight::SM)
-            ->setAction(new UriTemplateActionBuilder('WEBSITE', 'https://example.com'));
+            ->setAction(
+                new UriTemplateActionBuilder(
+                    'WEBSITE',
+                    'https://example.com',
+                    new AltUriBuilder('https://example.com#desktop')
+                )
+            );
         $spacer = new SpacerComponentBuilder(ComponentSpaceSize::SM);
 
         return BoxComponentBuilder::builder()
             ->setLayout(ComponentLayout::VERTICAL)
             ->setSpacing(ComponentSpacing::SM)
             ->setFlex(0)
+            ->setBackgroundColor('#fafafa')
+            ->setBorderColor('#e0e0e0')
+            ->setBorderWidth('1px')
             ->setContents([$callButton, $websiteButton, $spacer]);
     }
 }

@@ -35,7 +35,7 @@ class SeparatorComponentBuilder implements ComponentBuilder
     /** @var string */
     private $color;
 
-    /** @var array */
+    /** @var array|null */
     private $component;
 
     /**
@@ -63,7 +63,7 @@ class SeparatorComponentBuilder implements ComponentBuilder
     /**
      * Set margin.
      *
-     * @param ComponentMargin|null $margin
+     * @param ComponentMargin|string|null $margin
      * @return SeparatorComponentBuilder
      */
     public function setMargin($margin)

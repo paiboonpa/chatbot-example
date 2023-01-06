@@ -18,21 +18,24 @@
 
 namespace LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder;
 
-use LINE\LINEBot\TemplateActionBuilder;
 use LINE\LINEBot\Constant\Flex\ComponentAlign;
 use LINE\LINEBot\Constant\Flex\ComponentGravity;
 use LINE\LINEBot\Constant\Flex\ComponentImageAspectMode;
 use LINE\LINEBot\Constant\Flex\ComponentImageAspectRatio;
 use LINE\LINEBot\Constant\Flex\ComponentImageSize;
 use LINE\LINEBot\Constant\Flex\ComponentMargin;
+use LINE\LINEBot\Constant\Flex\ComponentPosition;
+use LINE\LINEBot\Constant\Flex\ComponentSpacing;
 use LINE\LINEBot\Constant\Flex\ComponentType;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder;
+use LINE\LINEBot\TemplateActionBuilder;
 use LINE\LINEBot\Util\BuildUtil;
 
 /**
  * A builder class for image component.
  *
  * @package LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class ImageComponentBuilder implements ComponentBuilder
 {
@@ -56,19 +59,32 @@ class ImageComponentBuilder implements ComponentBuilder
     private $backgroundColor;
     /** @var TemplateActionBuilder */
     private $actionBuilder;
+    /** @var bool */
+    private $animated;
 
-    /** @var array */
+    /** @var string */
+    private $position;
+    /** @var string */
+    private $offsetTop;
+    /** @var string */
+    private $offsetBottom;
+    /** @var string */
+    private $offsetStart;
+    /** @var string */
+    private $offsetEnd;
+
+    /** @var array|null */
     private $component;
 
     /**
      * ImageComponentBuilder constructor.
      *
-     * @param string $url
+     * @param string|null $url
      * @param int|null $flex
      * @param ComponentMargin|null $margin
      * @param ComponentAlign|null $align
      * @param ComponentGravity|null $gravity
-     * @param ComponentImageSize|null $size
+     * @param ComponentImageSize|string|null $size
      * @param ComponentImageAspectRatio|null $aspectRatio
      * @param ComponentImageAspectMode|null $aspectMode
      * @param string|null $backgroundColor
@@ -135,7 +151,7 @@ class ImageComponentBuilder implements ComponentBuilder
     /**
      * Set margin.
      *
-     * @param ComponentMargin|null $margin
+     * @param ComponentMargin|string|null $margin
      * @return ImageComponentBuilder
      */
     public function setMargin($margin)
@@ -147,7 +163,7 @@ class ImageComponentBuilder implements ComponentBuilder
     /**
      * Set align.
      *
-     * @param ComponentAlign|null $align
+     * @param ComponentAlign|string|null $align
      * @return ImageComponentBuilder
      */
     public function setAlign($align)
@@ -159,7 +175,7 @@ class ImageComponentBuilder implements ComponentBuilder
     /**
      * Set gravity.
      *
-     * @param ComponentGravity|null $gravity
+     * @param ComponentGravity|string|null $gravity
      * @return ImageComponentBuilder
      */
     public function setGravity($gravity)
@@ -171,7 +187,13 @@ class ImageComponentBuilder implements ComponentBuilder
     /**
      * Set size.
      *
-     * @param ComponentImageSize|null $size
+     * specifiable percentage, pixel and keyword.
+     * (e.g.
+     * percentage: 5%
+     * pixel: 5px
+     * keyword: xxs (defined in ComponentImageSize)
+     *
+     * @param ComponentImageSize|string|null $size
      * @return ImageComponentBuilder
      */
     public function setSize($size)
@@ -183,7 +205,7 @@ class ImageComponentBuilder implements ComponentBuilder
     /**
      * Set aspectRatio.
      *
-     * @param ComponentImageAspectRatio|null $aspectRatio
+     * @param ComponentImageAspectRatio|string|null $aspectRatio
      * @return ImageComponentBuilder
      */
     public function setAspectRatio($aspectRatio)
@@ -195,7 +217,7 @@ class ImageComponentBuilder implements ComponentBuilder
     /**
      * Set aspectMode.
      *
-     * @param ComponentImageAspectMode|null $aspectMode
+     * @param ComponentImageAspectMode|string|null $aspectMode
      * @return ImageComponentBuilder
      */
     public function setAspectMode($aspectMode)
@@ -229,6 +251,107 @@ class ImageComponentBuilder implements ComponentBuilder
     }
 
     /**
+     * Set position.
+     *
+     * specifiable relative or absolute
+     *
+     * @param string|ComponentPosition|null $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+        return $this;
+    }
+
+    /**
+     * Set offsetTop.
+     *
+     * specifiable percentage, pixel and keyword.
+     * (e.g.
+     * percentage: 5%
+     * pixel: 5px
+     * keyword: none (defined in ComponentSpacing)
+     *
+     * @param string|ComponentSpacing|null $offsetTop
+     * @return $this
+     */
+    public function setOffsetTop($offsetTop)
+    {
+        $this->offsetTop = $offsetTop;
+        return $this;
+    }
+
+    /**
+     * Set offsetBottom.
+     *
+     * specifiable percentage, pixel and keyword.
+     * (e.g.
+     * percentage: 5%
+     * pixel: 5px
+     * keyword: none (defined in ComponentSpacing)
+     *
+     * @param string|ComponentSpacing|null $offsetBottom
+     * @return $this
+     */
+    public function setOffsetBottom($offsetBottom)
+    {
+        $this->offsetBottom = $offsetBottom;
+        return $this;
+    }
+
+    /**
+     * Set offsetStart.
+     *
+     * specifiable percentage, pixel and keyword.
+     * (e.g.
+     * percentage: 5%
+     * pixel: 5px
+     * keyword: none (defined in ComponentSpacing)
+     *
+     * @param string|ComponentSpacing|null $offsetStart
+     * @return $this
+     */
+    public function setOffsetStart($offsetStart)
+    {
+        $this->offsetStart = $offsetStart;
+        return $this;
+    }
+
+    /**
+     * Set offsetEnd.
+     *
+     * specifiable percentage, pixel and keyword.
+     * (e.g.
+     * percentage: 5%
+     * pixel: 5px
+     * keyword: none (defined in ComponentSpacing)
+     *
+     * @param string|ComponentSpacing|null $offsetEnd
+     * @return $this
+     */
+    public function setOffsetEnd($offsetEnd)
+    {
+        $this->offsetEnd = $offsetEnd;
+        return $this;
+    }
+
+    /**
+     * Set animated.
+     *
+     * When this is true, an animated image (APNG) plays.
+     * default: false
+     *
+     * @param bool $animated
+     * @return $this
+     */
+    public function setAnimated($animated = false)
+    {
+        $this->animated = $animated;
+        return $this;
+    }
+
+    /**
      * Builds image component structure.
      *
      * @return array
@@ -251,6 +374,12 @@ class ImageComponentBuilder implements ComponentBuilder
             'aspectMode' => $this->aspectMode,
             'backgroundColor' => $this->backgroundColor,
             'action' => BuildUtil::build($this->actionBuilder, 'buildTemplateAction'),
+            'position' => $this->position,
+            'offsetTop' => $this->offsetTop,
+            'offsetBottom' => $this->offsetBottom,
+            'offsetStart' => $this->offsetStart,
+            'offsetEnd' => $this->offsetEnd,
+            'animated' => $this->animated,
         ]);
 
         return $this->component;

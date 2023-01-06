@@ -26,6 +26,11 @@
 if (!function_exists('hash_equals')) {
     defined('USE_MB_STRING') or define('USE_MB_STRING', function_exists('mb_strlen'));
 
+    /**
+     * @param string $knownString
+     * @param string $userString
+     * @return bool
+     */
     function hash_equals($knownString, $userString)
     {
         $strlen = function ($string) {
@@ -53,65 +58,85 @@ if (!function_exists('hash_equals')) {
 
 class LINEBotTiny
 {
+    /** @var string */
+    private $channelAccessToken;
+    /** @var string */
+    private $channelSecret;
+
+    /**
+     * @param string $channelAccessToken
+     * @param string $channelSecret
+     */
     public function __construct($channelAccessToken, $channelSecret)
     {
         $this->channelAccessToken = $channelAccessToken;
         $this->channelSecret = $channelSecret;
     }
 
+    /**
+     * @return mixed
+     */
     public function parseEvents()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
-            error_log("Method not allowed");
+            error_log('Method not allowed');
             exit();
         }
 
         $entityBody = file_get_contents('php://input');
 
-        if (strlen($entityBody) === 0) {
+        if ($entityBody === false || strlen($entityBody) === 0) {
             http_response_code(400);
-            error_log("Missing request body");
+            error_log('Missing request body');
             exit();
         }
 
         if (!hash_equals($this->sign($entityBody), $_SERVER['HTTP_X_LINE_SIGNATURE'])) {
             http_response_code(400);
-            error_log("Invalid signature value");
+            error_log('Invalid signature value');
             exit();
         }
 
         $data = json_decode($entityBody, true);
         if (!isset($data['events'])) {
             http_response_code(400);
-            error_log("Invalid request body: missing events property");
+            error_log('Invalid request body: missing events property');
             exit();
         }
         return $data['events'];
     }
 
+    /**
+     * @param array<string, mixed> $message
+     * @return void
+     */
     public function replyMessage($message)
     {
         $header = array(
-            "Content-Type: application/json",
+            'Content-Type: application/json',
             'Authorization: Bearer ' . $this->channelAccessToken,
         );
 
-        $context = stream_context_create(array(
-            "http" => array(
-                "method" => "POST",
-                "header" => implode("\r\n", $header),
-                "content" => json_encode($message),
-            ),
-        ));
+        $context = stream_context_create([
+            'http' => [
+                'ignore_errors' => true,
+                'method' => 'POST',
+                'header' => implode("\r\n", $header),
+                'content' => json_encode($message),
+            ],
+        ]);
 
         $response = file_get_contents('https://api.line.me/v2/bot/message/reply', false, $context);
         if (strpos($http_response_header[0], '200') === false) {
-            http_response_code(500);
-            error_log("Request failed: " . $response);
+            error_log('Request failed: ' . $response);
         }
     }
 
+    /**
+     * @param string $body
+     * @return string
+     */
     private function sign($body)
     {
         $hash = hash_hmac('sha256', $body, $this->channelSecret, true);

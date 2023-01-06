@@ -54,6 +54,19 @@ class BaseEvent
     }
 
     /**
+     * Returns mode.
+     *
+     * active: The channel is active.
+     * standby: The channel is waiting.
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->event['mode'];
+    }
+
+    /**
      * Returns timestamp of the event.
      *
      * @return int
@@ -64,13 +77,33 @@ class BaseEvent
     }
 
     /**
+     * Returns webhook event id
+     *
+     * @return string
+     */
+    public function getWebhookEventId()
+    {
+        return $this->event['webhookEventId'];
+    }
+
+    /**
+     * Returns the event is a redelivered one or not.
+     *
+     * @return bool
+     */
+    public function isRedelivery()
+    {
+        return $this->event['deliveryContext']['isRedelivery'];
+    }
+
+    /**
      * Returns reply token of the event.
      *
      * @return string|null
      */
     public function getReplyToken()
     {
-        return array_key_exists('replyToken', $this->event) ? $this->event['replyToken'] : null;
+        return isset($this->event['replyToken']) ? $this->event['replyToken'] : null;
     }
 
     /**
@@ -120,7 +153,7 @@ class BaseEvent
      */
     public function getUserId()
     {
-        return array_key_exists('userId', $this->event['source'])
+        return isset($this->event['source']['userId'])
             ? $this->event['source']['userId']
             : null;
     }
@@ -136,7 +169,7 @@ class BaseEvent
         if (!$this->isGroupEvent()) {
             throw new InvalidEventSourceException('This event source is not a group type');
         }
-        return array_key_exists('groupId', $this->event['source'])
+        return isset($this->event['source']['groupId'])
             ? $this->event['source']['groupId']
             : null;
     }
@@ -152,7 +185,7 @@ class BaseEvent
         if (!$this->isRoomEvent()) {
             throw new InvalidEventSourceException('This event source is not a room type');
         }
-        return array_key_exists('roomId', $this->event['source'])
+        return isset($this->event['source']['roomId'])
             ? $this->event['source']['roomId']
             : null;
     }
@@ -180,5 +213,15 @@ class BaseEvent
 
         # Unknown event
         return null;
+    }
+
+    /**
+     * Returns event
+     *
+     * @return array
+     */
+    public function getEvent()
+    {
+        return $this->event;
     }
 }

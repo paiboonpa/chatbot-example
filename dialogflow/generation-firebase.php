@@ -3,6 +3,8 @@ date_default_timezone_set('Asia/Bangkok');
 
 require('vendor/autoload.php');
 
+$database_uri = '<Firebase Database URI ของคุณ>';
+
 use Kreait\Firebase\Factory;
 
 // receive request from Dialogflow fulfillment
@@ -14,7 +16,7 @@ $intent = $request['queryResult']['intent']['displayName'];
 
 if ($intent == 'Generation - custom - yes') {
     // Initialize the Firebase Admin SDK
-    $firebase = (new Factory)->withServiceAccount('key.json');
+    $firebase = (new Factory)->withServiceAccount('key.json')->withDatabaseUri($database_uri);
 
     // Get a reference to the database
     $database = $firebase->CreateDatabase();

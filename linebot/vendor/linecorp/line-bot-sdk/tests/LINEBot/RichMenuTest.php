@@ -33,7 +33,7 @@ class RichMenuTest extends TestCase
     public function testGetRichMenu()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('GET', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/richmenu/123', $url);
             $testRunner->assertEquals([], $data);
@@ -50,7 +50,7 @@ class RichMenuTest extends TestCase
     public function testCreateRichMenu()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('POST', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/richmenu', $url);
 
@@ -107,7 +107,7 @@ class RichMenuTest extends TestCase
     public function testDeleteRichMenu()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('DELETE', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/richmenu/123', $url);
             $testRunner->assertEquals([], $data);
@@ -124,7 +124,7 @@ class RichMenuTest extends TestCase
     public function testGetRichMenuId()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('GET', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/user/123/richmenu', $url);
             $testRunner->assertEquals([], $data);
@@ -138,10 +138,61 @@ class RichMenuTest extends TestCase
         $this->assertEquals(200, $res->getJSONDecodedBody()['status']);
     }
 
+    public function testSetDefaultRichMenuId()
+    {
+        $mock = function ($testRunner, $httpMethod, $url, $data) {
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
+            $testRunner->assertEquals('POST', $httpMethod);
+            $testRunner->assertEquals('https://api.line.me/v2/bot/user/all/richmenu/123', $url);
+            $testRunner->assertEquals([], $data);
+            return ['status' => 200];
+        };
+        $bot = new LINEBot(new DummyHttpClient($this, $mock), ['channelSecret' => 'CHANNEL-SECRET']);
+        $res = $bot->setDefaultRichMenuId(123);
+
+        $this->assertEquals(200, $res->getHTTPStatus());
+        $this->assertTrue($res->isSucceeded());
+        $this->assertEquals(200, $res->getJSONDecodedBody()['status']);
+    }
+
+    public function testGetDefaultRichMenuId()
+    {
+        $mock = function ($testRunner, $httpMethod, $url, $data) {
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
+            $testRunner->assertEquals('GET', $httpMethod);
+            $testRunner->assertEquals('https://api.line.me/v2/bot/user/all/richmenu', $url);
+            $testRunner->assertEquals([], $data);
+            return ['status' => 200];
+        };
+        $bot = new LINEBot(new DummyHttpClient($this, $mock), ['channelSecret' => 'CHANNEL-SECRET']);
+        $res = $bot->getDefaultRichMenuId();
+
+        $this->assertEquals(200, $res->getHTTPStatus());
+        $this->assertTrue($res->isSucceeded());
+        $this->assertEquals(200, $res->getJSONDecodedBody()['status']);
+    }
+
+    public function testCancelDefaultRichMenuId()
+    {
+        $mock = function ($testRunner, $httpMethod, $url, $data) {
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
+            $testRunner->assertEquals('DELETE', $httpMethod);
+            $testRunner->assertEquals('https://api.line.me/v2/bot/user/all/richmenu', $url);
+            $testRunner->assertEquals([], $data);
+            return ['status' => 200];
+        };
+        $bot = new LINEBot(new DummyHttpClient($this, $mock), ['channelSecret' => 'CHANNEL-SECRET']);
+        $res = $bot->cancelDefaultRichMenuId();
+
+        $this->assertEquals(200, $res->getHTTPStatus());
+        $this->assertTrue($res->isSucceeded());
+        $this->assertEquals(200, $res->getJSONDecodedBody()['status']);
+    }
+
     public function testLinkRichMenu()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('POST', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/user/123/richmenu/567', $url);
             $testRunner->assertEquals([], $data);
@@ -155,10 +206,30 @@ class RichMenuTest extends TestCase
         $this->assertEquals(200, $res->getJSONDecodedBody()['status']);
     }
 
+    public function testBulkLinkRichMenu()
+    {
+        $mock = function ($testRunner, $httpMethod, $url, $data) {
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
+            $testRunner->assertEquals('POST', $httpMethod);
+            $testRunner->assertEquals('https://api.line.me/v2/bot/richmenu/bulk/link', $url);
+            $testRunner->assertEquals([
+                'userIds' => ['123'],
+                'richMenuId' => '567',
+            ], $data);
+            return ['status' => 202];
+        };
+        $bot = new LINEBot(new DummyHttpClient($this, $mock), ['channelSecret' => 'CHANNEL-SECRET']);
+        $res = $bot->bulkLinkRichMenu([123], 567);
+
+        $this->assertEquals(200, $res->getHTTPStatus());
+        $this->assertTrue($res->isSucceeded());
+        $this->assertEquals(202, $res->getJSONDecodedBody()['status']);
+    }
+
     public function testUnlinkRichMenu()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('DELETE', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/user/123/richmenu', $url);
             $testRunner->assertEquals([], $data);
@@ -172,12 +243,31 @@ class RichMenuTest extends TestCase
         $this->assertEquals(200, $res->getJSONDecodedBody()['status']);
     }
 
+    public function testBulkUnlinkRichMenu()
+    {
+        $mock = function ($testRunner, $httpMethod, $url, $data) {
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
+            $testRunner->assertEquals('POST', $httpMethod);
+            $testRunner->assertEquals('https://api.line.me/v2/bot/richmenu/bulk/unlink', $url);
+            $testRunner->assertEquals([
+                'userIds' => ['123']
+            ], $data);
+            return ['status' => 202];
+        };
+        $bot = new LINEBot(new DummyHttpClient($this, $mock), ['channelSecret' => 'CHANNEL-SECRET']);
+        $res = $bot->bulkUnlinkRichMenu([123]);
+
+        $this->assertEquals(200, $res->getHTTPStatus());
+        $this->assertTrue($res->isSucceeded());
+        $this->assertEquals(202, $res->getJSONDecodedBody()['status']);
+    }
+
     public function testDownloadRichMenuImage()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('GET', $httpMethod);
-            $testRunner->assertEquals('https://api.line.me/v2/bot/richmenu/123/content', $url);
+            $testRunner->assertEquals('https://api-data.line.me/v2/bot/richmenu/123/content', $url);
             $testRunner->assertEquals([], $data);
             return ['status' => 200];
         };
@@ -192,9 +282,9 @@ class RichMenuTest extends TestCase
     public function testUploadRichMenuImage()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data, $headers) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('POST', $httpMethod);
-            $testRunner->assertEquals('https://api.line.me/v2/bot/richmenu/123/content', $url);
+            $testRunner->assertEquals('https://api-data.line.me/v2/bot/richmenu/123/content', $url);
 
             $testRunner->assertEquals(1, count($headers));
             $testRunner->assertEquals('Content-Type: image/png', $headers[0]);
@@ -214,7 +304,7 @@ class RichMenuTest extends TestCase
     public function testGetRichMenuList()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('GET', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/richmenu/list', $url);
             $testRunner->assertEquals([], $data);

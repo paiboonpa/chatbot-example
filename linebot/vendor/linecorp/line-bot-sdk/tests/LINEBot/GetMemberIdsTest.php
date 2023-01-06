@@ -27,7 +27,7 @@ class GetMemberIdsTest extends TestCase
     public function testGetGroupMemberIds()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('GET', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/group/GROUP_ID/members/ids', $url);
 
@@ -61,7 +61,7 @@ class GetMemberIdsTest extends TestCase
 
         $data = $res->getJSONDecodedBody();
         $this->assertEquals(['Uxxxxxxxxxxxxxx4', 'Uxxxxxxxxxxxxxx5'], $data['memberIds']);
-        $this->assertFalse(array_key_exists('next', $data));
+        $this->assertFalse(isset($data['next']));
 
         // test getAllGroupMemberIds()
         $memberIds = $bot->getAllGroupMemberIds('GROUP_ID');
@@ -74,7 +74,7 @@ class GetMemberIdsTest extends TestCase
     public function testGetRoomMemberIds()
     {
         $mock = function ($testRunner, $httpMethod, $url, $data) {
-            /** @var \PHPUnit_Framework_TestCase $testRunner */
+            /** @var \PHPUnit\Framework\TestCase $testRunner */
             $testRunner->assertEquals('GET', $httpMethod);
             $testRunner->assertEquals('https://api.line.me/v2/bot/room/ROOM_ID/members/ids', $url);
 
@@ -108,7 +108,7 @@ class GetMemberIdsTest extends TestCase
 
         $data = $res->getJSONDecodedBody();
         $this->assertEquals(['Uxxxxxxxxxxxxxx4', 'Uxxxxxxxxxxxxxx5'], $data['memberIds']);
-        $this->assertFalse(array_key_exists('next', $data));
+        $this->assertFalse(isset($data['next']));
 
         // test getAllGroupMemberIds()
         $memberIds = $bot->getAllRoomMemberIds('ROOM_ID');

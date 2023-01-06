@@ -25,7 +25,7 @@ namespace LINE\LINEBot\HTTPClient;
  */
 class Curl
 {
-    /** @var resource */
+    /** @var mixed */
     private $ch;
 
     /**
@@ -53,7 +53,7 @@ class Curl
     /**
      * Perform a cURL session
      *
-     * @return bool Returns TRUE on success or FALSE on failure. However, if the CURLOPT_RETURNTRANSFER
+     * @return bool|string Returns TRUE on success or FALSE on failure. However, if the CURLOPT_RETURNTRANSFER
      * option is set, it will return the result on success, FALSE on failure.
      */
     public function exec()

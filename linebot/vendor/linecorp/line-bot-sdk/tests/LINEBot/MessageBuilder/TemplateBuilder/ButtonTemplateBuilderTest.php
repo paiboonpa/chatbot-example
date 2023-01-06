@@ -15,6 +15,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 namespace LINE\Tests\LINEBot\MessageBuilder\TemplateBuilder;
 
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
@@ -25,7 +26,6 @@ use PHPUnit\Framework\TestCase;
 
 class ButtonTemplateBuilderTest extends TestCase
 {
-
     private static $tests = [
         [
             'param' => ['aaa', 'bbb', 'ccc', ['postback', 'message', 'uri']],
@@ -117,7 +117,20 @@ JSON
   ]
 }
 JSON
-        ]
+        ],
+        [
+            'param' => ["0", 'aaa', null, ['uri']],
+            'json' => <<<JSON
+{
+  "type":"buttons",
+  "title":"0",
+  "text":"aaa",
+  "actions":[
+    {"type":"uri","label":"EEE","uri":"FFF"}
+  ]
+}
+JSON
+        ],
     ];
 
     public function test()
